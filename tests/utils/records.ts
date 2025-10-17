@@ -1,7 +1,7 @@
-import type { ExpressionOrFactory, Insertable, Kysely, SqlBool } from 'kysely';
-import { DB } from '@/database';
+import type { ExpressionOrFactory, Insertable, Kysely, SqlBool } from 'kysely'
+import { DB } from '@/database'
 
-type HelperType<N extends keyof DB> = { [P in N]: DB[P] };
+type HelperType<N extends keyof DB> = { [P in N]: DB[P] }
 
 /**
  * Given a database instance and a table name, returns a function
@@ -16,7 +16,7 @@ export const createFor =
       .insertInto(tableName)
       .values(records as any)
       .returningAll()
-      .execute();
+      .execute()
 
 /**
  * Given a database instance and a table name, returns a function
@@ -27,12 +27,10 @@ export const createFor =
 export const selectAllFor =
   <N extends keyof DB, T extends HelperType<N>>(db: Kysely<T>, tableName: N) =>
   (expression?: ExpressionOrFactory<DB, N, SqlBool>) => {
-    const query = db
-      .selectFrom(tableName)
-      .selectAll();
+    const query = db.selectFrom(tableName).selectAll()
 
     return expression
-      // shortcut which works as long as there are no table aliases
-      ? query.where(expression as any).execute()
-      : query.execute();
-  };
+      ? // shortcut which works as long as there are no table aliases
+        query.where(expression as any).execute()
+      : query.execute()
+  }

@@ -1,4 +1,4 @@
-import type { MigrationProvider, Migration } from 'kysely';
+import type { MigrationProvider, Migration } from 'kysely'
 
 /**
  * This migration provider is used when running migrations from the
@@ -15,8 +15,8 @@ export default class ModuleMigrationProvider implements MigrationProvider {
       {
         eager: true,
       }
-    );
+    )
 
-    return migrations;
+    return migrations
   }
 }

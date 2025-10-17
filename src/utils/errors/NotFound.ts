@@ -1,10 +1,10 @@
-import { StatusCodes } from "http-status-codes";
+import { StatusCodes } from 'http-status-codes'
 
 export default class NotFound extends Error {
-  status: number;
+  status: number
 
   constructor(message: string) {
-    super(message);
-    this.status = StatusCodes.NOT_FOUND;
+    super(message)
+    this.status = StatusCodes.NOT_FOUND
   }
 }

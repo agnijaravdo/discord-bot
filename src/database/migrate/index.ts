@@ -1,6 +1,6 @@
-import "dotenv/config";
-import { type Kysely, type MigrationProvider, Migrator } from "kysely";
-import type { DB } from "../types";
+import 'dotenv/config'
+import { type Kysely, type MigrationProvider, Migrator } from 'kysely'
+import type { DB } from '../types'
 
 export async function migrateToLatest(
   provider: MigrationProvider,
@@ -9,7 +9,7 @@ export async function migrateToLatest(
   const migrator = new Migrator({
     db,
     provider,
-  });
+  })
 
-  return migrator.migrateToLatest();
+  return migrator.migrateToLatest()
 }
