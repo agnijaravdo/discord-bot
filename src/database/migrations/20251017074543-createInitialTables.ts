@@ -16,17 +16,10 @@ export async function up(db: Kysely<SqliteDatabase>) {
     .execute();
 
   await db.schema
-    .createTable("users")
-    .ifNotExists()
-    .addColumn("id", "integer", (c) => c.primaryKey().autoIncrement().notNull())
-    .addColumn("username", "text", (c) => c.notNull().unique())
-    .execute();
-
-  await db.schema
     .createTable("messages")
     .ifNotExists()
     .addColumn("id", "integer", (c) => c.primaryKey().autoIncrement().notNull())
-    .addColumn("user_id", "integer", (c) => c.notNull().references("users.id").onDelete("cascade"))
+    .addColumn("username", "text", (c) => c.notNull())
     .addColumn("sprint_id", "integer", (c) => c.notNull().references("sprints.id").onDelete("cascade"))
     .addColumn("template_id", "integer", (c) => c.notNull().references("templates.id").onDelete("cascade"))
     .addColumn("final_message", "text", (c) => c.notNull())
@@ -39,7 +32,6 @@ export async function up(db: Kysely<SqliteDatabase>) {
 
 export async function down(db: Kysely<SqliteDatabase>) {
   await db.schema.dropTable("messages").ifExists().execute();
-  await db.schema.dropTable("templates").ifExists().execute();
   await db.schema.dropTable("sprints").ifExists().execute();
-  await db.schema.dropTable("users").ifExists().execute();
+  await db.schema.dropTable("templates").ifExists().execute();
 }

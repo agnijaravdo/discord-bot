@@ -11,7 +11,7 @@ export interface Messages {
   sentAt: Generated<string>;
   sprintId: number;
   templateId: number;
-  userId: number;
+  username: string;
 }
 
 export interface Sprints {
@@ -24,14 +24,8 @@ export interface Templates {
   message: string;
 }
 
-export interface Users {
-  id: Generated<number>;
-  username: string;
-}
-
 export interface DB {
   messages: Messages;
   sprints: Sprints;
   templates: Templates;
-  users: Users;
 }
