@@ -1,15 +1,14 @@
 import express from 'express'
 import jsonErrorHandler from './middleware/jsonErrors'
 import { type Database } from './database'
+import templates from './modules/templates/controller'
 
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export default function createApp(db: Database) {
   const app = express()
 
   app.use(express.json())
 
-  // register your controllers here
-  // app.use("/movies", movies(db));
+  app.use('/templates', templates(db))
 
   app.use(jsonErrorHandler)
 

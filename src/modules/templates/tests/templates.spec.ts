@@ -1,10 +1,8 @@
 import supertest from 'supertest'
-import createDatabase from '@/database'
+import createTestDatabase from '@tests/utils/createTestDatabase'
 import createApp from '@/app'
 
-const db = createDatabase(process.env.DATABASE_URL as string, {
-  readonly: true,
-})
+const db = await createTestDatabase()
 const app = createApp(db)
 
 describe('Templates API', () => {
