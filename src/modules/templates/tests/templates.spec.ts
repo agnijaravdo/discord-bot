@@ -74,30 +74,83 @@ describe('Templates API', () => {
       }
     })
   })
+
+  describe('GET /templates/:id', () => {
+    it('should return a template by its ID', async () => {
+      const { body: createdTemplate } = await supertest(app)
+        .post('/templates')
+        .send({ message: 'Congratulations! You did it!' })
+
+      const { body, status } = await supertest(app).get(
+        `/templates/${createdTemplate.id}`
+      )
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject({
+        id: createdTemplate.id,
+        message: 'Congratulations! You did it!',
+      })
+    })
+
+    it('should return 404 if template not found', async () => {
+      const { body, status } = await supertest(app).get('/templates/999')
+
+      expect(status).toBe(404)
+      expect(body.error).toBeDefined()
+    })
+  })
+
+  describe('PATCH /templates/:id', () => {
+    it('should update a template by its ID', async () => {
+      const { body: createdTemplate } = await supertest(app)
+        .post('/templates')
+        .send({ message: 'Old Message' })
+
+      const updatedData = { message: 'Updated Message' }
+      const { body, status } = await supertest(app)
+        .patch(`/templates/${createdTemplate.id}`)
+        .send(updatedData)
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject({
+        id: createdTemplate.id,
+        message: 'Updated Message',
+      })
+    })
+
+    it('should return 404 if template to update is not found', async () => {
+      const updatedData = { message: 'Updated Message' }
+      const { body, status } = await supertest(app)
+        .patch('/templates/999')
+        .send(updatedData)
+
+      expect(status).toBe(404)
+      expect(body.error).toBeDefined()
+    })
+  })
+
+  describe('DELETE /templates/:id', () => {
+    it('should delete a template by its ID', async () => {
+      const { body: createdTemplate } = await supertest(app)
+        .post('/templates')
+        .send({ message: 'To be deleted' })
+
+      const { body, status } = await supertest(app).delete(
+        `/templates/${createdTemplate.id}`
+      )
+
+      expect(status).toBe(200)
+      expect(body).toMatchObject({
+        id: createdTemplate.id,
+        message: 'To be deleted',
+      })
+    })
+
+    it('should return 404 if template to delete is not found', async () => {
+      const { body, status } = await supertest(app).delete('/templates/999')
+
+      expect(status).toBe(404)
+      expect(body.error).toBeDefined()
+    })
+  })
 })
-
-//   describe('GET /screenings', () => {
-//     it('should return all screenings with movie details', async () => {
-//       // Act
-//       const { body, status } = await supertest(app).get('/screenings')
-
-//       // Assert
-//       expect(status).toBe(200)
-//       expect(Array.isArray(body)).toBe(true)
-
-//       if (body.length > 0) {
-//         expect(body[0]).toMatchObject({
-//           id: expect.any(Number),
-//           movie: {
-//             id: expect.any(Number),
-//             title: expect.any(String),
-//             year: expect.any(Number),
-//           },
-//           timestamp: expect.any(String),
-//           totalTickets: expect.any(Number),
-//           reservedTickets: expect.any(Number),
-//           ticketsLeft: expect.any(Number),
-//         })
-//       }
-//     })
-//   })
