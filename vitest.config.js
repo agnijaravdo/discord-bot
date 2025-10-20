@@ -8,6 +8,7 @@ export default defineConfig({
     globals: true,
     coverage: {
       provider: 'v8',
+      reporter: ['text', 'json', 'html'],
     },
   },
   resolve: {
@@ -16,4 +17,4 @@ export default defineConfig({
       '@tests': path.resolve(__dirname, './tests'),
     },
   },
-});
+})
