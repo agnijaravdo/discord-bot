@@ -14,6 +14,7 @@ export const createFor =
   (records: Insertable<DB[N]> | Insertable<DB[N]>[]) =>
     db
       .insertInto(tableName)
+      // eslint-disable-next-line @typescript-eslint/no-explicit-any
       .values(records as any)
       .returningAll()
       .execute()
@@ -31,6 +32,7 @@ export const selectAllFor =
 
     return expression
       ? // shortcut which works as long as there are no table aliases
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
         query.where(expression as any).execute()
       : query.execute()
   }
