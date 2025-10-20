@@ -9,7 +9,8 @@ describe('Sprints API', () => {
   describe('POST /sprints', () => {
     it('should create a new sprint', async () => {
       const sprintData = {
-        name: 'WD-1.1',
+        name: 'First Steps Into Programming with Python',
+        code: 'WD-1.1',
       }
 
       const { body, status } = await supertest(app)
@@ -19,13 +20,15 @@ describe('Sprints API', () => {
       expect(status).toBe(201)
       expect(body).toMatchObject({
         id: expect.any(Number),
-        name: 'WD-1.1',
+        name: 'First Steps Into Programming with Python',
+        code: 'WD-1.1',
       })
     })
 
     it('should return 400 when validation fails', async () => {
       const invalidData = {
         name: '',
+        code: '',
       }
 
       const { body, status } = await supertest(app)
@@ -47,8 +50,30 @@ describe('Sprints API', () => {
       expect(body.error).toBeDefined()
     })
 
+    it('should return 400 when code is missing', async () => {
+      const invalidData = { name: 'Sprint name' }
+
+      const { body, status } = await supertest(app)
+        .post('/sprints')
+        .send(invalidData)
+
+      expect(status).toBe(400)
+      expect(body.error).toBeDefined()
+    })
+
     it('should return 400 when name is not a string', async () => {
       const invalidData = { name: 123 }
+
+      const { body, status } = await supertest(app)
+        .post('/sprints')
+        .send(invalidData)
+
+      expect(status).toBe(400)
+      expect(body.error).toBeDefined()
+    })
+
+    it('should return 400 when code is not a string', async () => {
+      const invalidData = { name: 'Sprint name', code: 456 }
 
       const { body, status } = await supertest(app)
         .post('/sprints')
@@ -70,6 +95,7 @@ describe('Sprints API', () => {
         expect(body[0]).toMatchObject({
           id: expect.any(Number),
           name: expect.any(String),
+          code: expect.any(String),
         })
       }
     })
@@ -79,7 +105,10 @@ describe('Sprints API', () => {
     it('should return a sprint by its ID', async () => {
       const { body: createdSprint } = await supertest(app)
         .post('/sprints')
-        .send({ name: 'WD-1.1' })
+        .send({
+          name: 'First Steps Into Programming with Python',
+          code: 'WD-1.1',
+        })
 
       const { body, status } = await supertest(app).get(
         `/sprints/${createdSprint.id}`
@@ -88,7 +117,8 @@ describe('Sprints API', () => {
       expect(status).toBe(200)
       expect(body).toMatchObject({
         id: createdSprint.id,
-        name: 'WD-1.1',
+        name: 'First Steps Into Programming with Python',
+        code: 'WD-1.1',
       })
     })
 
@@ -104,9 +134,12 @@ describe('Sprints API', () => {
     it('should update a sprint by its ID', async () => {
       const { body: createdSprint } = await supertest(app)
         .post('/sprints')
-        .send({ name: 'WD-1.1' })
+        .send({
+          name: 'First Steps Into Programming with Python',
+          code: 'WD-1.1',
+        })
 
-      const updatedData = { name: 'Updated Name' }
+      const updatedData = { name: 'Updated Name', code: 'WD-1.2' }
       const { body, status } = await supertest(app)
         .patch(`/sprints/${createdSprint.id}`)
         .send(updatedData)
@@ -115,11 +148,12 @@ describe('Sprints API', () => {
       expect(body).toMatchObject({
         id: createdSprint.id,
         name: 'Updated Name',
+        code: 'WD-1.2',
       })
     })
 
     it('should return 404 if sprint to update is not found', async () => {
-      const updatedData = { name: 'Updated Name' }
+      const updatedData = { name: 'Updated Name', code: 'WD-1.2' }
       const { body, status } = await supertest(app)
         .patch('/sprints/999')
         .send(updatedData)
@@ -133,7 +167,7 @@ describe('Sprints API', () => {
     it('should delete a sprint by its ID', async () => {
       const { body: createdSprint } = await supertest(app)
         .post('/sprints')
-        .send({ name: 'To be deleted' })
+        .send({ name: 'To be deleted', code: 'WD-1.3' })
 
       const { body, status } = await supertest(app).delete(
         `/sprints/${createdSprint.id}`
@@ -143,6 +177,7 @@ describe('Sprints API', () => {
       expect(body).toMatchObject({
         id: createdSprint.id,
         name: 'To be deleted',
+        code: 'WD-1.3',
       })
     })
 

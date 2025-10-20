@@ -9,6 +9,11 @@ const schema = z.object({
     .min(1, { message: 'Name must be at least 1 character long' })
     .max(100, { message: 'Name must be maximum 100 characters long' })
     .trim(),
+  code: z
+    .string({ invalid_type_error: 'Code must be a string' })
+    .min(1, { message: 'Code must be at least 1 character long' })
+    .max(50, { message: 'Code must be maximum 20 characters long' })
+    .trim(),
 })
 
 const insertable = schema.omit({

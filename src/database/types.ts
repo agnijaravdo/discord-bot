@@ -16,6 +16,7 @@ export interface Messages {
 }
 
 export interface Sprints {
+  code: string
   id: Generated<number>
   name: string
 }
