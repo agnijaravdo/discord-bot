@@ -14,13 +14,13 @@ export default (db: Database) => {
     .route('/')
     .get(
       jsonRoute(async () => {
-        return sprints.findAll()
+        return await sprints.findAll()
       }, StatusCodes.OK)
     )
     .post(
       jsonRoute(async (req) => {
         const body = schema.parseInsertable(req.body)
-        return sprints.create(body)
+        return await sprints.create(body)
       }, StatusCodes.CREATED)
     )
 

@@ -14,13 +14,13 @@ export default (db: Database) => {
     .route('/')
     .get(
       jsonRoute(async () => {
-        return templates.findAll()
+        return await templates.findAll()
       }, StatusCodes.OK)
     )
     .post(
       jsonRoute(async (req) => {
         const body = schema.parseInsertable(req.body)
-        return templates.create(body)
+        return await templates.create(body)
       }, StatusCodes.CREATED)
     )
 
