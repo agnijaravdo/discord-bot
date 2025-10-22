@@ -19,17 +19,23 @@ export default (db: Database) => {
     .route('/')
     .get(
       jsonRoute(async (req) => {
-        const { username, sprint } = schema.parseQueryParams(req.query) // GET /messages?username=$name and GET /messages?sprint=$code
+        const { username, sprint } = schema.parseQueryParams(req.query)
 
         if (username) {
-          return await messages.findByUsername(username)
+          // API Design decision: if returning an array, when data not found, return empty array instead of 404,
+          // for individual resource endpoints return 404
+          return await messages.findByUsername(username) // GET /messages?username=$name
         }
         if (sprint) {
-          return await messages.findBySprintCode(sprint)
+          const sprintData = await sprints.findByCode(sprint)
+          if (!sprintData) {
+            throw new SprintNotFound(`Sprint with code ${sprint} not found`)
+          }
+          return await messages.findBySprintId(sprintData.id) // GET /messages?sprint=$code
         }
 
         return await messages.findAll() // GET /messages
-      }, StatusCodes.OK)
+      })
     )
     .post(
       jsonRoute(async (req) => {
