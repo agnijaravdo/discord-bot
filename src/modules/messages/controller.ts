@@ -43,12 +43,16 @@ export default (db: Database) => {
 
         const sprint = await sprints.findByCode(sprintCode)
         if (!sprint) {
-          throw new SprintNotFound(`Sprint with code ${sprintCode} not found`)
+          throw new SprintNotFound(
+            `Cannot form congratulatory message: Sprint "${sprintCode}" not found`
+          )
         }
 
         const allTemplates = await templates.findAll()
         if (allTemplates.length === 0) {
-          throw new TemplateNotFound('No templates available')
+          throw new TemplateNotFound(
+            'Cannot form congratulatory message: No message templates available'
+          )
         }
         const randomTemplate =
           allTemplates[Math.floor(Math.random() * allTemplates.length)]
@@ -58,11 +62,18 @@ export default (db: Database) => {
           sprintId: sprint.id,
           templateId: randomTemplate.id,
           finalMessage: `${username} has just completed the sprint ${sprint.name}! ${randomTemplate.message}`,
-          gifUrl: 'https://example.com/default.gif',
+          gifUrl: 'https://example.com/default.gif', // TODO: change later
         }
 
         const validatedMessageData = schema.parseInsertable(messageData)
-        return await messages.create(validatedMessageData)
+        const newMessage = await messages.create(validatedMessageData)
+
+        if (!newMessage) {
+          throw new Error('Failed to create congratulatory message in database')
+        }
+
+        // TODO: send message to Discord and notify if not sent
+        return newMessage
       }, StatusCodes.CREATED)
     )
 
