@@ -31,3 +31,5 @@ If you make changes to the database schema, you will need to update the types. Y
 ```bash
 npm run generate-types
 ```
+
+cp .env.example .env
