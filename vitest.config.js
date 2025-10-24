@@ -12,7 +12,10 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
+      repository: './coverage',
+      exclude: ['src/database/index.ts', 'src/index.ts', 'src/utils/errors'],
     },
+    skipFull: false,
   },
   resolve: {
     alias: {
