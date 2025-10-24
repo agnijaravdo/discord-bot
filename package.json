@@ -43,6 +43,7 @@
   "dependencies": {
     "@giphy/js-fetch-api": "^5.7.0",
     "better-sqlite3": "^9.5.0",
+    "discord.js": "^14.24.0",
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "http-status-codes": "^2.3.0",
