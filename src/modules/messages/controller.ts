@@ -8,6 +8,7 @@ import buildTemplatesRepository from '../templates/repository'
 import { StatusCodes } from 'http-status-codes'
 import { SprintNotFound } from '../sprints/errors'
 import { TemplateNotFound } from '../templates/errors'
+import { fetchRandomCelebrationGif } from '@/services/giphy/giphy'
 
 export default (db: Database) => {
   const messages = buildRepository(db)
@@ -57,12 +58,14 @@ export default (db: Database) => {
         const randomTemplate =
           allTemplates[Math.floor(Math.random() * allTemplates.length)]
 
+        const randomCelebrationGif = await fetchRandomCelebrationGif()
+
         const messageData = {
           username,
           sprintId: sprint.id,
           templateId: randomTemplate.id,
           finalMessage: `${username} has just completed the sprint ${sprint.name}! ${randomTemplate.message}`,
-          gifUrl: 'https://example.com/default.gif', // TODO: change later
+          gifUrl: randomCelebrationGif,
         }
 
         const validatedMessageData = schema.parseInsertable(messageData)

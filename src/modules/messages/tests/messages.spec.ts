@@ -2,6 +2,11 @@ import supertest from 'supertest'
 import createTestDatabase from '@tests/utils/createTestDatabase'
 import createApp from '@/app'
 import { createFor } from '@tests/utils/records'
+import { fetchRandomCelebrationGif } from '@/services/giphy/giphy'
+
+vi.mock('@/services/giphy/giphy', () => ({
+  fetchRandomCelebrationGif: vi.fn(),
+}))
 
 describe('Messages API', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -23,6 +28,12 @@ describe('Messages API', () => {
     ])
 
     await createTemplates([{ id: 1, message: 'Congratulations!' }])
+
+    vi.clearAllMocks()
+
+    vi.mocked(fetchRandomCelebrationGif).mockResolvedValue(
+      'https://example.com/celebration.gif'
+    )
   })
 
   afterEach(async () => {
@@ -30,7 +41,7 @@ describe('Messages API', () => {
   })
 
   describe('POST /messages', () => {
-    it('should create a new message', async () => {
+    it('should create a new message with a celebration GIF', async () => {
       const { body, status } = await supertest(app).post('/messages').send({
         username: 'john_doe',
         sprintCode: 'WD-1.1',
@@ -44,9 +55,24 @@ describe('Messages API', () => {
         templateId: 1,
         finalMessage:
           'john_doe has just completed the sprint Web Development Introduction! Congratulations!',
-        gifUrl: 'https://example.com/default.gif',
+        gifUrl: 'https://example.com/celebration.gif',
         sentAt: expect.any(String),
       })
+      expect(fetchRandomCelebrationGif).toHaveBeenCalledTimes(1)
+    })
+
+    it('should call Giphy API for each message creation', async () => {
+      await supertest(app).post('/messages').send({
+        username: 'john_doe',
+        sprintCode: 'WD-1.1',
+      })
+
+      await supertest(app).post('/messages').send({
+        username: 'jane_doe',
+        sprintCode: 'WD-1.1',
+      })
+
+      expect(fetchRandomCelebrationGif).toHaveBeenCalledTimes(2)
     })
 
     it('should return 404 if sprint not found', async () => {
