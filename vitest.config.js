@@ -13,7 +13,14 @@ export default defineConfig({
       provider: 'v8',
       reporter: ['text', 'json', 'html'],
       repository: './coverage',
-      exclude: ['src/database/index.ts', 'src/index.ts', 'src/utils/errors'],
+      exclude: [
+        // Excluding database infrastructure related files from coverage, startup scripts,
+        // and error types definitions as they do not have business logic to test.
+        'src/database/index.ts',
+        'src/database/migrate/bin.ts',
+        'src/index.ts',
+        'src/utils/errors',
+      ],
     },
     skipFull: false,
   },
