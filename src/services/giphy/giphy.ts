@@ -12,11 +12,14 @@ export async function fetchRandomCelebrationGif(): Promise<string> {
   const gf = new GiphyFetch(process.env.GIPHY_API_KEY)
 
   try {
-    const response = await gf.search('celebration, success', {
-      sort: 'relevant',
-      lang: 'en',
-      limit: 25,
-    })
+    const response = await gf.search(
+      'celebration, success, congratulations, victory',
+      {
+        sort: 'relevant',
+        lang: 'en',
+        limit: 50,
+      }
+    )
 
     if (response.data.length === 0) {
       return fallbackGifUrl

@@ -41,7 +41,7 @@ describe('External API tests for Giphy service', () => {
     expect(mockProcessExit).toHaveBeenCalledWith(1)
   })
 
-  it('should fetch a random celebration, success GIF', async () => {
+  it('should fetch a random celebration, success, congratulations, or victory GIF', async () => {
     const mockedGifsUrl = {
       data: [
         {
@@ -59,11 +59,14 @@ describe('External API tests for Giphy service', () => {
     mockGifSearch.mockResolvedValueOnce(mockedGifsUrl)
 
     const gifUrl = await fetchRandomCelebrationGif()
-    expect(mockGifSearch).toHaveBeenCalledWith('celebration, success', {
-      sort: 'relevant',
-      lang: 'en',
-      limit: 25,
-    })
+    expect(mockGifSearch).toHaveBeenCalledWith(
+      'celebration, success, congratulations, victory',
+      {
+        sort: 'relevant',
+        lang: 'en',
+        limit: 50,
+      }
+    )
     expect(gifUrl).toMatch(/https:\/\/giphy\.com\/gif[1-3]\.gif/)
   })
 

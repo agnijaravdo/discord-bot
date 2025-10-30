@@ -1,6 +1,7 @@
 import 'dotenv/config'
 import createApp from './app'
 import createDatabase from './database'
+import './services/discord/discord'
 
 const { DATABASE_URL } = process.env
 const PORT = 3000

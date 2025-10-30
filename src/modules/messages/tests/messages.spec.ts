@@ -8,6 +8,10 @@ vi.mock('@/services/giphy/giphy', () => ({
   fetchRandomCelebrationGif: vi.fn(),
 }))
 
+vi.mock('@/services/discord/discord', () => ({
+  sendCongratulationMessage: vi.fn().mockResolvedValue(undefined),
+}))
+
 describe('Messages API', () => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   let db: any
@@ -54,7 +58,7 @@ describe('Messages API', () => {
         sprintId: 1,
         templateId: 1,
         finalMessage:
-          'john_doe has just completed the sprint Web Development Introduction! Congratulations!',
+          '@john_doe has just completed the sprint Web Development Introduction! Congratulations!',
         gifUrl: 'https://example.com/celebration.gif',
         sentAt: expect.any(String),
       })

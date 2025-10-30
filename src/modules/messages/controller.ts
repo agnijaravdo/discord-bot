@@ -9,6 +9,8 @@ import { StatusCodes } from 'http-status-codes'
 import { SprintNotFound } from '../sprints/errors'
 import { TemplateNotFound } from '../templates/errors'
 import { fetchRandomCelebrationGif } from '@/services/giphy/giphy'
+import { sendCongratulationMessage } from '@/services/discord/discord'
+import { MessageNotSavedError, MessageNotSentError } from './errors'
 
 export default (db: Database) => {
   const messages = buildRepository(db)
@@ -64,19 +66,34 @@ export default (db: Database) => {
           username,
           sprintId: sprint.id,
           templateId: randomTemplate.id,
-          finalMessage: `${username} has just completed the sprint ${sprint.name}! ${randomTemplate.message}`,
+          finalMessage: `@${username} has just completed the sprint ${sprint.name}! ${randomTemplate.message}`,
           gifUrl: randomCelebrationGif,
         }
 
-        const validatedMessageData = schema.parseInsertable(messageData)
-        const newMessage = await messages.create(validatedMessageData)
-
-        if (!newMessage) {
-          throw new Error('Failed to create congratulatory message in database')
+        try {
+          await sendCongratulationMessage(
+            process.env.DISCORD_SERVER_ID!,
+            process.env.DISCORD_CHANNEL_ID!,
+            messageData.finalMessage,
+            messageData.gifUrl,
+            username
+          )
+        } catch (discordError) {
+          console.error('Failed to send Discord message:', discordError)
+          throw new MessageNotSentError(
+            `Failed to send congratulatory message to Discord: ${discordError instanceof Error ? discordError.message : 'Unknown error'}`
+          )
         }
 
-        // TODO: send message to Discord and notify if not sent
-        return newMessage
+        try {
+          const validatedMessageData = schema.parseInsertable(messageData)
+          return await messages.create(validatedMessageData)
+        } catch (dbError) {
+          console.error('Failed to save message to database:', dbError)
+          throw new MessageNotSavedError(
+            `Failed to save message to database: ${dbError instanceof Error ? dbError.message : 'Unknown error'}`
+          )
+        }
       }, StatusCodes.CREATED)
     )
 
