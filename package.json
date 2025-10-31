@@ -12,7 +12,9 @@
     "migrate:latest": "tsx src/database/migrate/bin",
     "gen:types": "kysely-codegen --camel-case --dialect sqlite --out-file src/database/types.ts",
     "test": "vitest",
-    "coverage": "vitest run --coverage"
+    "coverage": "vitest run --coverage",
+    "seed": "tsx src/database/seeds/seedInitialData.ts",
+    "queryDb": "sqlite3 data/database.db"
   },
   "keywords": [],
   "author": "",

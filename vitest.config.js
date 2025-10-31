@@ -18,6 +18,7 @@ export default defineConfig({
         // and error types definitions as they do not have business logic to test.
         'src/database/index.ts',
         'src/database/migrate/bin.ts',
+        'src/database/seeds/seedInitialData.ts',
         'src/index.ts',
         'src/utils/errors',
       ],
