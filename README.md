@@ -5,7 +5,7 @@ Discord bot that cheers users on for their learning achievements, helping foster
 ## Features
 
 - REST API to send and manage congratulatory messages for learning achievements
-- Integrates with Discord to send celebratory messages and GIFs to users
+- Integrates with Discord to send celebratory messages and GIFs about user's achievements to selected channels
 - Fetches random celebration GIFs from Giphy
 - Retrieves random congratulatory message templates from the database
 - Retrieves sprint titles from the database
