@@ -1,4 +1,5 @@
 import { Client, GatewayIntentBits, Guild, GuildMember } from 'discord.js'
+
 const client = new Client({
   intents: [
     GatewayIntentBits.Guilds,
@@ -15,21 +16,6 @@ client.on('clientReady', () => {
 client.on('error', (error) => {
   console.error('Discord client error:', error)
 })
-
-if (!process.env.DISCORD_TOKEN) {
-  console.error('DISCORD_TOKEN is not set in environment variables.')
-  process.exit(1)
-}
-
-if (!process.env.DISCORD_SERVER_ID) {
-  console.error('DISCORD_SERVER_ID is not set in environment variables.')
-  process.exit(1)
-}
-
-if (!process.env.DISCORD_CHANNEL_ID) {
-  console.error('DISCORD_CHANNEL_ID is not set in environment variables.')
-  process.exit(1)
-}
 
 client.login(process.env.DISCORD_TOKEN)
 
@@ -55,7 +41,6 @@ export function createUserMention(
   userId?: string
 ) {
   if (userId) {
-    console.log(`Creating mention for user ID: ${userId}`)
     return message.replace(`@${username}`, `<@${userId}>`)
   }
   return message
