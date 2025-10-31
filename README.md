@@ -1,35 +1,91 @@
+# Discord Achievement Bot
+
+Discord bot that cheers users on for their learning achievements, helping foster a supportive and motivating community.
+
+## Features
+
+- REST API to send and manage congratulatory messages for learning achievements
+- Integrates with Discord to send celebratory messages and GIFs to users
+- Fetches random celebration GIFs from Giphy
+- Retrieves random congratulatory message templates from the database
+- Retrieves sprint titles from the database
+- Stores sent messages and metadata for later retrieval
+
+## API Endpoints
+
+- POST /messages — Send a congratulatory message to a user on Discord
+- GET /messages — List all congratulatory messages
+- GET /messages?username=johdoe — List messages for a specific user
+- GET /messages?sprint=WD-1.1 — List messages for a specific sprint
+- POST/GET/PATCH/DELETE /templates — Manage congratulatory message templates
+- POST/GET/PATCH/DELETE /sprints — Manage sprints
+
+## Technologies Used
+
+- Node.js & TypeScript
+- Express.js (REST API)
+- SQLite (database)
+- Kysely (type-safe SQL queries & migrations)
+- Zod (validation)
+- Discord.js (Discord bot integration)
+- @giphy/js-fetch-api (GIFs from Giphy)
+- Vitest (testing)
+- ESLint & Prettier (linting & formatting)
+
 ## Setup
 
-**Note:** For this exercise, we have provided an `.env` file with the database connection string. Normally, you would not commit this file to version control. We are doing it here for simplicity and given that we are using a local SQLite database.
+1. **Install dependencies:**
 
-## Migrations
+   ```bash
+   npm install
+   ```
 
-Before running the migrations, we need to create a database. We can do this by running the following command:
+2. **Copy environment file:**
 
-```bash
-npm run migrate:latest
-```
+   ```bash
+   cp .env.example .env
+   ```
 
-## Running the server
+   Open `.env` and add your Discord, Giphy, and database values.
 
-In development mode:
+3. **Run migrations to create tables:**
 
-```bash
-npm run dev
-```
+   ```bash
+   npm run migrate:latest
+   ```
 
-In production mode:
+4. **Generate TypeScript types:**
 
-```bash
-npm run start
-```
+   ```bash
+   npm run gen:types
+   ```
 
-## Updating types
+5. **Seed initial sprints and templates:**
+   ```bash
+   npm run seed
+   ```
 
-If you make changes to the database schema, you will need to update the types. You can do this by running the following command:
+## Running and Testing
 
-```bash
-npm run generate-types
-```
+- **Run in development mode:**
 
-cp .env.example .env
+  ```bash
+  npm run dev
+  ```
+
+- **Run in production mode:**
+
+  ```bash
+  npm run start
+  ```
+
+- **Run tests:**
+
+  ```bash
+  npm test
+  ```
+
+- **Run coverage:**
+  ```bash
+  npm run coverage
+  ```
