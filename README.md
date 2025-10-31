@@ -13,12 +13,12 @@ Discord bot that cheers users on for their learning achievements, helping foster
 
 ## API Endpoints
 
-- POST /messages — Send a congratulatory message to a user on Discord
-- GET /messages — List all congratulatory messages
-- GET /messages?username=johdoe — List messages for a specific user
-- GET /messages?sprint=WD-1.1 — List messages for a specific sprint
-- POST/GET/PATCH/DELETE /templates — Manage congratulatory message templates
-- POST/GET/PATCH/DELETE /sprints — Manage sprints
+- `POST /messages` — Send a congratulatory message to a user on Discord
+- `GET /messages` — List all congratulatory messages
+- `GET /messages?username=johdoe` — List messages for a specific user
+- `GET /messages?sprint=WD-1.1` — List messages for a specific sprint
+- `POST/GET/PATCH/DELETE /templates` — Manage congratulatory message templates
+- `POST/GET/PATCH/DELETE /sprints` — Manage sprints
 
 ## Technologies Used
 
